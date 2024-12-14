@@ -1,0 +1,14 @@
+## Interface: 110007
+## Title: Lib: LibIterTools
+## Notes: A cadaverous collection of iteration tools for iteration.
+## Author: Ghostopheles
+## Version: @project-version@
+## IconAtlas: minortalents-icon-book
+
+## OptionalDeps: LibStub
+
+## X-License: Public Domain
+## X-Category: Library
+
+LibStub/LibStub.lua
+LibIterTools-1.0.lua
