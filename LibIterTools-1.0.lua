@@ -13,10 +13,10 @@ end
 ------------
 --- generic iterators
 
----@param t table
+---@param tbl table
 ---@param iter? fun(tbl: table, key: any): any, any Used for iteration over the table or dataset
 ---@param predicate? fun(value: any): boolean Used to filter the output
-function LibIterTools.Iterate(t, iter, predicate)
+function LibIterTools.Iterate(tbl, iter, predicate)
     iter = iter or next;
     predicate = predicate or function(...) return true; end;
 
@@ -24,7 +24,7 @@ function LibIterTools.Iterate(t, iter, predicate)
     return function()
         local value;
         repeat
-            key, value = iter(t, key);
+            key, value = iter(tbl, key);
         until key == nil or predicate(value);
         return value;
     end
