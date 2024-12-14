@@ -14,13 +14,17 @@ end
 --- generic iterators
 
 ---@param t table
----@param predicate function
-function LibIterTools.IterateWithPredicate(t, predicate)
+---@param iter? fun(tbl: table, key: any): any, any Used for iteration over the table or dataset
+---@param predicate? fun(value: any): boolean Used to filter the output
+function LibIterTools.Iterate(t, iter, predicate)
+    iter = iter or next;
+    predicate = predicate or function(...) return true; end;
+
     local key;
     return function()
         local value;
         repeat
-            key, value = next(t, key);
+            key, value = iter(t, key);
         until key == nil or predicate(value);
         return value;
     end
@@ -46,9 +50,7 @@ function LibIterTools.Count(start, stop, step)
     end
 end
 
----@alias Sequence table | string
-
----@param sequence Sequence A sequence to cycle through
+---@param sequence table | string A sequence to cycle through
 ---@param cycles? number Number of times to cycle through the sequence
 function LibIterTools.Cycle(sequence, cycles)
     local function GetNext(t, k)
@@ -118,19 +120,22 @@ function LibIterTools.Accumulate(array, func)
     end
 end
 
+---@param array table
+---@param batchSize number
 function LibIterTools.Batch(array, batchSize)
     local i = 0;
+    local n = #array;
     return function()
         i = i + 1;
-        local tbl = {};
-        for k=i, batchSize do
-            i = i + 1;
-            if k > #array then
-                break;
-            end
+        if i > n then
+            return;
+        end
 
+        local tbl = {};
+        for k=i, i + batchSize do
             tinsert(tbl, array[k]);
         end
+        i = i + batchSize;
         return tbl;
     end
 end
